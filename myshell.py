@@ -7,15 +7,17 @@
 import os, sys, subprocess
 from cmd import Cmd
 
+# from itertools import izip
+
 # A colours class consisting of escape commands to make the terminal stand out more
 class colours:		
-    BLUE = '\033[94m'
-    GREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-    END = '\033[0m'
+	BLUE = '\033[94m'
+	GREEN = '\033[92m'
+	WARNING = '\033[93m'
+	FAIL = '\033[91m'
+	BOLD = '\033[1m'
+	UNDERLINE = '\033[4m'
+	END = '\033[0m'
 
 class MyShell:
 
@@ -31,7 +33,7 @@ class MyShell:
 	# Directory initiated to default value of empty string
 	def cd(self, directory = ""):
 		
-		# If the <directory> argument is missing, the current directory is returned
+		# If the <directory> argument is not present, the current directory is returned
 		if directory == "" or directory == ".":
 			return
 		
@@ -39,7 +41,7 @@ class MyShell:
 		try:
 			os.chdir(directory)
 			
-			# this command also change the PWD environment variable
+			# this command also changes the PWD environment variable
 			newDir = os.getcwd()
 			os.environ['PWD'] = newDir
 
@@ -50,10 +52,10 @@ class MyShell:
 
 
 	def clr(self):
-		# Clears the screen 
+		# Clears the screen
 		print("\033c", end ="")
 	
-	# List contents of specified directory
+	# A function to list the contents of a specified directory.
 	def dir(self, directory):
 		try:
 			itemCount = len([name for name in os.listdir(directory)])
@@ -72,7 +74,7 @@ class MyShell:
 			print(accessWarning)
 
 
-	# A function to list all of the current environment strings
+	# A function to list all of the environment strings
 	def environ(self):
 		environment = os.environ
 		for item in environment:
@@ -84,33 +86,9 @@ class MyShell:
 		print(input + "\n")
 
 
-	# Display a user help menu
+	# Display the user manual using the more command.
 	def help(self):
-		print(colours.UNDERLINE + colours.BOLD + ("\t" * 2) + "Operations at your disposal:" + colours.END + "\n")
-
-		print(colours.BOLD + "cd <directory>" + colours.END)
-		print("a command that changes the current directory to <directory>.")
-		print("type cd followed by the desired directory you want to change to" + "\n")
-
-		print(colours.BOLD + "clr" + colours.END)
-		print("a command that clears the screen.")
-		print("type 'clr' to clear the screen of text" + "\n")
-
-		print(colours.BOLD + "dir <directory>" + colours.END) 
-		print("lists the contents of directory <directory>." + "\n")
-
-		print(colours.BOLD + "echo <comment>" + colours.END)
-		print("displays the <comment> followed by a new line." + "\n")
-
-		print(colours.BOLD + "help" + colours.END)
-		print("displays the user manual." + "\n")
-
-		print(colours.BOLD + "pause" + colours.END)
-		print("pauses operation of the shell until 'Enter' is pressed." + "\n")
-
-		print(colours.BOLD + "quit" + colours.END)
-		print("quits the shell." + "\n")
-
+		os.system("more readme")
 
 	#Pauses the shell
 	def pause(self):
@@ -125,21 +103,17 @@ class MyShell:
 	# Exits the shell
 	def quit(self):
 		print("Goodbye For Now")
-		sys.exit()
-
+		os.exit(0)
 
 	# Creates a new subprocess with specified environment variables
 	def childProcess(self, args):
-	    pid = os.fork()
-	    if pid > 0:
-	        wpid = os.waitpid(pid, 0)
-	    else:
-	        try:
-	            os.execvp(args[1], args)
-	        except Exception as e:
-	            print(colours.WARNING + "Process Creation Error" + colours.END)
-
-
+		pid = os.fork()
+		if pid > 0:
+			wpid = os.waitpid(pid, 0)
+		else:
+				print(args)
+				subprocess.call(['python3', args])	
+	
 	# Enables the shell to take its command line input from a file.
 	# e.g myshell batchfile
 	# the batchfiles commands are executed
@@ -165,6 +139,7 @@ class MyShell:
 			
 			elif command[0] == "clr":
 				if len(command) > 1:
+					# appropriate error handling if a paramter is supplied with the clr command
 					print("error: 'clr' does not take a parameter")
 				else:
 					self.clr()
@@ -179,7 +154,7 @@ class MyShell:
 				self.environ()
 			
 			elif command[0] == "echo":
-				# text is joined together into a string by a space
+				# multiple spaces/tabs are reduced to a single space.
 				self.echo(" ".join(command[1:]))
 			
 			elif command[0] == "help":
