@@ -19,7 +19,7 @@ class colours:
     UNDERLINE = '\033[4m'
     END = '\033[0m'
 
-class myshell:
+class MyShell:
 
     def __init__(self):
 
@@ -54,8 +54,6 @@ class myshell:
     def clr(self):
         # Clears the screen
         print("\033c", end ="")
-
-
     
     # 1(iii)
     # A function to list the contents of a specified directory.
@@ -77,43 +75,13 @@ class myshell:
             accessWarning = colours.WARNING + "dir: cannot access '" + directory + "': No such file or directory"
             print(accessWarning)
 
-    def redirection_dir(self, args, symbol, filename):
-        if not args:
-            args = "."
-            content = "-----------------\n"
-        for line in os.listdir(args):
-         content += line + "\n"
-        content += "-----------------"
-        if ">" == symbol:
-         with open(filename, 'w+') as f:
-             f.write(content)
-        else:
-         with open(filename, 'a+') as f:
-             f.write("\n" + content)
-
-
-
     # 1(iv)
     # A function to list all of the environment strings.
     def environ(self):
         environment = os.environ
         for item in environment:
             print(item + " = " + environment[item])
-
-    def redirection_environ(self, symbol, filename):
-        environ = os.environ
-        content = ""
-        for k,v in environ.items():
-            content += k + "=" + v + "\n"
-        if ">" == symbol:
-            with open(filename, 'w+') as f:
-                f.write(content)
-        else:
-            with open(filename, 'a+') as f:
-                f.write("\n" + content)
     
-
-
     # 1(v)   
     # A function to display user input on the terminal followed by a new line
     def echo(self, input):
@@ -122,35 +90,10 @@ class myshell:
         else:
             print("error: 'cd' no input provided")
 
-
-    def redirection_echo(self, args, symbol, filename):
-        content = args.rstrip()
-        if ">" == symbol:
-            with open(filename, 'w+') as f:
-                f.write(content)
-        else:
-            with open(filename, 'a+') as f:
-                f.write("\n" + content)
-
-
-
     # 1(vi)
     # A function that displays the user manual using the more command
     def help(self):
         os.system("more readme")
-
-    def redirection_help(self, symbol, filename):
-        f = open("readme", "r")
-        if f.mode == "r":
-            content = f.read()
-        if ">" == symbol:
-            with open(filename, 'w+') as f:
-                f.write(content)
-        else:
-            with open(filename, 'a+') as f:
-                f.write("\n" + content)
-
-
 
     # 1(vi)
     # A function that pauses the shell
@@ -162,12 +105,11 @@ class myshell:
         except ValueError as e:
             print(e)
 
-
     # 1(vii)
     # A function that exits the shell
     def quit(self):
         print("Goodbye For Now")
-        exit()
+        sys.exit()
 
     # Creates a new subprocess with specified environment variables
     def childProcess(self, args):
@@ -180,27 +122,6 @@ class myshell:
         except:
             print(colours.WARNING + "Process Creation Error" + colours.END)
 
-
-
-    def redirection(self, command, filename):
-    #main overwrite that will deal with dir, environ, echo & help
-        try:
-         if "dir" == command[0]:
-            #redirection(command, sign, filename)
-            redirection_dir("".join(command[1:-1]),command[-1],filename)
-         elif "environ" == command[0]:
-            #redirection(sign, filename)
-            redirection_environ(command[-1], filename)
-         elif "echo" == command[0]:
-            #redirection(command, sign, filename)
-            redirection_echo(" ".join(command[1:-1]),command[-1],filename)
-         elif "help" == command[0]:
-            #redirection(sign, filename)
-            line = redirection_help(command[-1], filename)
-         else:
-            print("Output redirectionion unavailable for *" + " ".join(command[:-1]) + "*")
-        except:
-            print("Error while trying to execute" + command)
 
 
     # Enables the shell to take its command line input from a file.
@@ -220,17 +141,7 @@ class myshell:
     # Checks user input for commands, otherwsie
     def run(self, command):
         try:
-            if len(command) > 2 and (">" == command[-2] or ">>" == command[-2]):
-                redirection(command[:-1], command[-1])
-            
-            elif "&" == command[-1]:
-                try:
-                    subprocess.Popen(command[:-1])
-                    return
-                except:
-                    print("Command Error, execution failed")
-
-            elif command[0] == "cd":
+            if command[0] == "cd":
                 if len(command) > 2:
                     print("error: 'cd' only accepts one directory parameter")
                 else:
@@ -253,7 +164,7 @@ class myshell:
                 self.environ()
             
             elif command[0] == "echo":
-                # multiple spaces/tabs are reduced to a `ngle space.
+                # multiple spaces/tabs are reduced to a single space.
                 self.echo(" ".join(command[1:]))
             
             elif command[0] == "help":
@@ -268,10 +179,10 @@ class myshell:
             else:
                 # All other command line input is interpreted as program invocation
                 # Gets done by shell forking and executing the programs as its own child processes.
-                self.childProcess(command[:])
+                self.childProcess(command[0:])
         
         except EOFError as e:
-            print("Error while trying to execute" + command)
+            print("")   
         
 # Main function
 def main(argv):
@@ -284,7 +195,7 @@ def main(argv):
         filename = argv[1]
 
         # invoke the read method to execute batchfile commands
-        myshell().read(filename)
+        MyShell().read(filename)
 
         # when the end of file is reached the shell exits and displays this message
         print("Exiting My Shell. Goodbye now")
@@ -296,7 +207,7 @@ def main(argv):
             entry = input(colours.GREEN + colours.BOLD + os.environ['PWD'] + colours.END + "$ ")
             if len(entry) != 0:
                 # invoke the run method
-                myshell().run(entry.split())
+                MyShell().run(entry.split())
 
 
 if __name__ == '__main__':
