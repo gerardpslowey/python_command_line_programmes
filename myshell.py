@@ -28,7 +28,7 @@ class MyShell:
         os.environ['SHELL'] = str(self.originDirectory) + "/myshell"
         os.environ['PWD'] = str(os.getcwd()) 
 
-
+    # 1(i)
     # A function that changes the current default director to <directory>
     # Directory initiated to default value of empty string
     def cd(self, directory = ""):
@@ -50,17 +50,19 @@ class MyShell:
             directoryWarning = colours.FAIL + "cd: " + directory + ": No such directory exists" + colours.END
             print(directoryWarning)
 
-
+    # 1(ii)
     def clr(self):
         # Clears the screen
         print("\033c", end ="")
     
+    # 1(iii)
     # A function to list the contents of a specified directory.
     def dir(self, directory):
         try:
             itemCount = len([name for name in os.listdir(directory)])
 
             # if the directory contains items, print them out one by one
+            
             if itemCount > 0:
                 for item in os.listdir(directory):
                     print(item)
@@ -73,24 +75,25 @@ class MyShell:
             accessWarning = colours.WARNING + "dir: cannot access '" + directory + "': No such file or directory"
             print(accessWarning)
 
-
-    # A function to list all of the environment strings
+    # 1(iv)
+    # A function to list all of the environment strings.
     def environ(self):
         environment = os.environ
         for item in environment:
             print(item + " = " + environment[item])
-
-        
+    
+    # 1(v)   
     # A function to display user input on the terminal followed by a new line
     def echo(self, input):
         print(input + "\n")
 
-
-    # Display the user manual using the more command.
+    # 1(vi)
+    # A function that displays the user manual using the more command
     def help(self):
         os.system("more readme")
 
-    #Pauses the shell
+    # 1(vi)
+    # A function that pauses the shell
     def pause(self):
         try:
             waiting = input("Shell Operation Paused - Press Enter to resume")
@@ -99,8 +102,8 @@ class MyShell:
         except ValueError as e:
             print(e)
 
-
-    # Exits the shell
+    # 1(vii)
+    # A function that exits the shell
     def quit(self):
         print("Goodbye For Now")
         sys.exit()
@@ -137,7 +140,7 @@ class MyShell:
         try:
             if command[0] == "cd":
                 if len(command) > 2:
-                    print("error: 'cd' only accepts one directory location")
+                    print("error: 'cd' only accepts one directory parameter")
                 else:
                     self.cd(command[1])
             
@@ -170,9 +173,9 @@ class MyShell:
             elif command[0] == "quit" or command[0] == "q":
                 self.quit()
             
-            # All other command line input is interpreted as program invocation
-            # Gets done by shell forking and executing the programs as its own child processes.
             else:
+                # All other command line input is interpreted as program invocation
+                # Gets done by shell forking and executing the programs as its own child processes.
                 self.childProcess(command[0:])
         
         except EOFError as e:
@@ -181,18 +184,15 @@ class MyShell:
 # Main function
 def main(argv):
     
-    # create a new instance of the MyShell() class
-    newShell = MyShell()
-
-    # initiate the user name
+    # get the user name
     user = str(os.environ['USER'])
 
-    # this function gets executed when executing from a supplied file
-    if len(argv) > 1:
+    # this function gets executed when executing from a supplied batch file
+    if len(argv) == 2:
         filename = argv[1]
 
         # invoke the read method to execute batchfile commands
-        newShell.read(filename)
+        MyShell().read(filename)
 
         # when the end of file is reached the shell exits and displays this message
         print("Exiting My Shell. Goodbye now")
@@ -204,7 +204,7 @@ def main(argv):
             entry = input(colours.GREEN + colours.BOLD + os.environ['PWD'] + colours.END + "$ ")
             if len(entry) != 0:
                 # invoke the run method
-                newShell.run(entry.split())
+                MyShell().run(entry.split())
 
 
 if __name__ == '__main__':
