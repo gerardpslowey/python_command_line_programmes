@@ -85,7 +85,10 @@ class MyShell:
     # 1(v)   
     # A function to display user input on the terminal followed by a new line
     def echo(self, input):
-        print(input + "\n")
+        if len(input) > 0:
+            print(input + "\n")
+        else:
+            print("error: 'cd' no input provided")
 
     # 1(vi)
     # A function that displays the user manual using the more command
