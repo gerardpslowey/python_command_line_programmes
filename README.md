@@ -49,7 +49,7 @@ First lets take a look at getting myshell up and running:
 		○ This shows us the path to the directory we are currently in (from where the shell was executed).
 		○ Its will look something like this:
 			/home/username/folder_name/folder_name
-		○ This will be further described in the sections below.
+		○ If you don't fuly understand this don't worry, it will be further described in the sections below.
 
 - If you do not see the messages above, you have gone wrong somewhere in the process, check through the steps again.
 
@@ -58,14 +58,13 @@ Submitting Commands to the shell
 +++++++++++++++++++++++++++++++++
 
 - The shell gives us space to type our commands after the directory path highlighted in green text.
-- When we have typed the command we want to execute we then hit the 'enter' key to submit.
+- When we have typed the command we want to execute, we then hit the 'enter' key to submit.
 - The shell then executes the command and returns the result.
 - Congratulations you are one step closer to becoming a linux master!
 
------------------------
+
 -----------------------
 ▶ Section B. Commands:
------------------------
 -----------------------
 
 Next, lets focus on what myshell can be used for:
@@ -73,8 +72,8 @@ Next, lets focus on what myshell can be used for:
 -------------------------------
 1. Changing the file directory
 -------------------------------
-- Directories is the term used in linux to refer to storage folders for files.
-- Usually the type of file is stored in the directory related to the name, this is not a strict rule however.
+Directories is the term used in linux to refer to storage folders for files.
+Usually the type of file is stored in the directory related to the name, this is not a strict rule however.
 
 The Linux Directory Structure, explained.
 - Coming from Windows the Linux file system can seem a bit strange.
@@ -94,13 +93,11 @@ The Linux Directory Structure, explained.
 
 - As mentioned above the shell displays the directory we are currently located, in green.
 
-- This helps us keep track of what directory we are in.
-
 - If we the user want to switch between the directories from our shell, we type the following command:
 
-		############################
-		#		cd 'directory' 	   #
-		############################
+		########################
+		#	cd 'directory' 	   #
+		########################
 
 - This command chages the current directory to the directory specified in between the quotes.
 
@@ -116,9 +113,11 @@ There are two options for browsing directories in linux.
 
 - Enter the following command:
 
-		##########################
-		#			cd .. 		 #
-		##########################
+		##################
+		#	  cd .. 	 #
+		##################
+
+- This is a shortcut command which is very handy to remember.
 
 - Otherwise to navigate to a folder within the directory you are in:
 	e.g to go from 		/home/user/Documents   to   /home/user/Documents/New
@@ -131,10 +130,9 @@ There are two options for browsing directories in linux.
 		#########################
 
 - Where 'folder_name' is the name of the folder we want to access.
-
 - If we want to access a pre-definded path to a directory we enter the above command replacing 'folder_name' with the required path.
 
-~~~~~~~~~~~
+
 Side Note:
 
 		##########################
@@ -143,7 +141,7 @@ Side Note:
 
 '.' refers to the current directory in linux.
 
-If we type 'cd .' in our shell, it will have no real noticable effect as we will remain in the current directory.
+- If we type 'cd .' in our shell, it will have no real noticable effect as we will remain in the current directory.
 
 
 -----------------------------
@@ -153,9 +151,9 @@ We use the clear function if we want want to clear the shell of text from previo
 
 To clear the screen we type in our shell:
 
-		###########################
-		#			clr			  #
-		###########################
+		#######################
+		#		clr			  #
+		#######################
 
 WARNING: You will loose all previous commands you have entered.
 
@@ -169,11 +167,11 @@ If we want to see what files are contained in a directory we enter:
 		#	  dir 'directory'	 #
 		##########################
 
-To simply view what the current directory stores enter 'dir' followed by no directory.
+To simply view what the current directory stores, enter 'dir' followed by no directory.
 
 However if we are in the 'Documents' Directory and we want to view the files in the 'Downloads' directory for example, 
 	- We enter the path of the Downloads folder, usually it will look something like this.
-		/home/user/Downloads
+		dir /home/user/Downloads
 
 
 -----------------------------------
@@ -191,9 +189,9 @@ To print all environment variables we enter:
 	USERNAME - displays the name of the user currently logged in.
 	PWD - displays the current directory tht the user is working from.
 	HOME - displays the home folder for your specific system.
-	SHELL - this stores the loaction of where the myshell file was originally executed from.
+	SHELL - this stores the loaction from where the myshell file was originally executed from.
 
-Its unlikely a beginner linux user will ever use the environment variables, they are however useful for reference.
+It's unlikely a beginner linux user will ever use the environment variables, they are however useful for reference.
 
 
 -----------------------------------------
@@ -211,26 +209,26 @@ The comment entered can be any length and contain any characters you want.
 ------------------------------
 6. Opening the command manual
 ------------------------------
-If you want reminding of what a particular function does enter:
+If you want reminding of what a particular function does, enter:
 
 		#####################
 		#		help    	#
 		#####################
 
-This displays a selection of avaialble commands and a short explanation.
+This command displays this manual within the shell without having to exit the command line environment.
 
 ---------------------
 7. Pausing the shell
 ---------------------
-If you want to pause shell operation the pause command can be used:
+If you want to pause shell operation, the pause command can be used:
 
 		#####################
 		#      pause		#
 		#####################
 
-It's handy when you want to go  a cup of tea but you arn't finished with the shell.
-Any keyboard input will just be ignored by the shell when it is paused.
-To resume the shell we just hit the enter key.
+- It's handy when you want to go  a cup of tea but you arn't finished with the shell.
+- Any keyboard input will just be ignored by the shell when it is paused.
+- To resume the shell we just hit the enter key.
 
 
 ---------------------
@@ -242,14 +240,29 @@ When you are finished using the shell you can enter the following command to kil
 		#       quit  	  	 #
 		######################
 
-However, if you are lazy like me and don't like typing you can simply enter q and it will perform the same action.
-This suspends the shell and returns to the normal linux command line.
+- However, if you are lazy like me and don't like typing you can simply enter the letter q and it will perform the same action.
+- This suspends the shell and returns to the normal linux command line.
 
 
 ----------------------------------------
 9. Running a file from the command line
 ----------------------------------------
+If you want to run your own file from the myshell screen you can do so by entering the following command in mysell:
 
+
+	#########################
+	#   'python_file.py'	#
+	#########################
+
+This will allow you to run your own python file as part of the myshell environment.
+
+*********************
+Background execution:
+*********************
+
+A special feature of myshell is the ability to run a programme in the background:
+- If you want to run a file in your shell but you want you want it to run in the background, just simpy place an ampersand '&' symbol at the end of your commannd.
+- myshell will recognise that you want to run the programme in the background and will just return the result of your programme output. 
 
 ------------------------------------------------
 10. Executing a set of commands from a batchfile
@@ -260,15 +273,78 @@ The commands you can put into the file must be some of the files in the above do
 Building the batchfile:
 	Each line of the batchfile must contain one and only one command.
 
-	E.g.
+E.g.
 	echo Hello
 	dir
 	cd
 
-You can then save the file with any desired name such as batch or commands.txt
+You can then save the file with any desired name such as 'batch' or 'commands.txt'
 The .txt extension is not required, but can be included if you want.
 
+**************************
+To execute the batchfile:
+**************************
+- You must quit myshell and return to the linux command line.
+Reminder: to do this simply enter 'q'
+
+- Then simply type as before:
+
+	#######################################
+	#  python3 myshell.py batchfile_name  #
+	#######################################
+
+- This is known as invoking the shell with a command line argument.
+
+myshell will recognise that you have supplied a batchfile to execute from.
+When the commands have been executed, the result will be displayed on screen and myshell will exit.
 
 --------------------
 11. I/O redirection
 --------------------
+I/O redirection gives the user a shortcut to storing programme execution output to files.
+
+E.g. 
+To get the contents of a direction we enter the previously seen command 
+
+		##########
+		#  dir   #
+		##########
+
+However, if we want to store this result to a file for later reference we extend our command to make use of I/O redirection:
+
+		########################
+		#   dir > store_file   #
+		########################
+
+	If we open this file in a text editor we will see the directory contents listed one item per line 
+
+*****************************************
+There are two options in I/O redirection:
+*****************************************
+
+		Overwrite
+		#################################
+		#     echo hello > outputfile   #
+		#################################
+		This command will store the text hello to the outputfile
+
+	The overwrite symbol (>) allows the user to replace the data in the output file with new data produced by the executed command.
+
+
+		Append
+		##########################################
+		#     python3 echo hello >> outputfile   #
+		##########################################
+
+	The append symbol used (>>) allows the user to add data produced from the executed command an append it to any data already present in the outputfile and not overwriting it.
+	
+	Don't worry if you have forgotten to create the outputfile that will be written to, myshell will do this automticlly for you.
+
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Overall, do not be afraid to adventure with the shells functionality.
+If something goes wrong the error message will give you a good insight to what you have done wrong an how you can fix it.
+If you are still confused however, read the section of this manual related to the error you are having.
+
+Finally, thanks for your time and hope you enjoyed myshell :)
