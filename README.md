@@ -256,9 +256,9 @@ If you want to run your own file from the myshell screen you can do so by enteri
 
 This will allow you to run your own python file as part of the myshell environment.
 
-*********************
+**********************
 Background execution:
-*********************
+**********************
 
 A special feature of myshell is the ability to run a programme in the background:
 - If you want to run a file in your shell but you want you want it to run in the background, just simpy place an ampersand '&' symbol at the end of your commannd.
@@ -342,7 +342,7 @@ There are two options in I/O redirection:
 
 
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Overall, do not be afraid to adventure with the shells functionality.
 If something goes wrong the error message will give you a good insight to what you have done wrong an how you can fix it.
 If you are still confused however, read the section of this manual related to the error you are having.
