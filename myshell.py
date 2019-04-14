@@ -233,6 +233,8 @@ class myshell:
         else:
             self.append(filename, content)
 
+        f.close()
+
 
     def environ_redirect(self, symbol, filename):
         environment = os.environ
@@ -249,8 +251,8 @@ class myshell:
             self.append(filename, variables)
 
 
-    def dir_redirect(self, args, symbol, filename):
-        if not args:
+    def dir_redirect(self, args="", symbol, filename):
+        if args == "":
             args = "."
         
         for line in os.listdir(args):
