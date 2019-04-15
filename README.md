@@ -1,11 +1,25 @@
-myshell - User Manual Page
-============================
+# Name: Gerard Slowey
+# Student Number: 17349433
+
+myshell - User Manual 
+======================
 
 -> Hello and welcome to the user manual for myshell.
 -> myshell is a custom built linux shell implemented through the python language, specifically Python 3. 
 -> myshell offers to you, the beginner linux user the most common commands as executed by linux users everyday. 
 -> The shell accepts multiple different commands as explained later in this manual. 
 -> The myshell file is designed to be run in any linux environment on the command line (the terminal)
+
+*************************
+Manual Layout explained:
+*************************
+
+    - Whenever you see text displayed between hash tags (#):
+        This indicates some executable code snippet.
+
+    - Text between asterisks (*):
+        This indicates an important point that you should read carefully to fully understand what's going on.
+
 -> Happy Reading!
 
 -----------------------
@@ -15,18 +29,20 @@ myshell - User Manual Page
 1. Initial Setup and Running the shell
 ---------------------------------------
 
-++++++++++++++++++++++++++
+**************************
 Getting your system ready
-++++++++++++++++++++++++++
+**************************
 
 First lets take a look at getting myshell up and running:
-- You will need a linux operating system to run the myshell file.
+- You will need the linux operating system to run the myshell file.
 
-- MacOs is based of linux so it will run the file natively.
+- MacOs is based of linux, so it will run the file natively.
 - Microsoft Windows does not natively support the linux operating system so it has to be downloaded externally.
-- There are many different distributions of linux, I recommend using Ubunut, it is user friendly and free.
-    ○ It is available to download at: https://www.ubuntu.com/download/desktop
-    ○ Guide to installing: https://itsfoss.com/install-ubuntu-1404-dual-boot-mode-windows-8-81-uefi/
+- There are many different distributions of linux, I recommend using Ubuntu however as it is user friendly and free.
+    ○ It is available to download at: 
+        https://www.ubuntu.com/download/desktop
+    ○ Guide to installing: 
+        https://itsfoss.com/install-ubuntu-1404-dual-boot-mode-windows-8-81-uefi/
 
 - When you have your linux operating system running save the myshell file to the 'home' directory.
     ○ this saves confusion at this step.
@@ -34,10 +50,10 @@ First lets take a look at getting myshell up and running:
 - In your linux application folder you should find a programme called 'Terminal'.
     ○ Click on the icon to launch the terminal.
 
-- Next type the following command verbatim or copy and paste it into the terminal (excluded the hashes):
+- Next type the following command verbatim or copy and paste it into the terminal:
 
     ############################
-         python3 myshell.py    
+        python3 myshell.py    
     ############################
 
 - This command executes the custom shell so we can use it and experiment with it.
@@ -57,10 +73,10 @@ First lets take a look at getting myshell up and running:
 Submitting Commands to the shell
 *********************************
 
-- The shell gives us space to type our commands after the directory path highlighted in green text.
-- When we have typed the command we want to execute, we then hit the 'enter' key to submit.
-- The shell then executes the command and returns the result.
-- Congratulations you are one step closer to becoming a linux master!
+    - The shell gives us space to type our commands after the directory path highlighted in green text.
+    - When we have typed the command we want to execute, we then hit the 'enter' key to submit.
+    - The shell then executes the command and returns the result.
+    - Congratulations you are one step closer to becoming a linux master!
 
 
 -----------------------
@@ -114,7 +130,7 @@ There are two options for browsing directories in linux.
 - Enter the following command:
 
     ##################
-          cd ..      
+        cd ..      
     ##################
 
 - This is a shortcut command which is very handy to remember.
@@ -199,9 +215,9 @@ It's unlikely a beginner linux user will ever use the environment variables, the
 -----------------------------------------
 If you want to have a little fun with the shell and want to disply a comment on screen you can use the echo command.
 
-    ##################
-      echo 'comment'
-    ##################
+    #####################
+        echo 'comment'
+    #####################
 
 The comment entered can be any length and contain any characters you want.
 
@@ -226,7 +242,7 @@ If you want to pause shell operation, the pause command can be used:
         pause
     #############
 
-- It's handy when you want to go  a cup of tea but you arn't finished with the shell.
+- It's handy when you want to go make a cup of tea but you aren't finished with the shell.
 - Any keyboard input will just be ignored by the shell when it is paused.
 - To resume the shell we just hit the enter key.
 
@@ -237,11 +253,11 @@ If you want to pause shell operation, the pause command can be used:
 When you are finished using the shell you can enter the following command to kill the shell:
 
     ###########
-       quit
+        quit
     ###########
 
-- However, if you are lazy like me and don't like typing you can simply enter the letter q and it will perform the same action.
-- This suspends the shell and returns to the normal linux command line.
+    - However, if you are lazy like me and don't like typing you can simply enter the letter q and it will perform the same action.
+    - This suspends the shell and returns to the normal linux command line.
 
 
 ----------------------------------------
@@ -251,32 +267,41 @@ If you want to run your own file from the myshell screen you can do so by enteri
 
 
     ######################
-       'python_file.py'
+        'python_file'.py
     ######################
 
-This will allow you to run your own python file as part of the myshell environment.
+    - Here you replace 'python_file' with the name of your python file.
+    - This will allow you to run your own python file as part of the myshell environment.
 
 **********************
 Background execution:
 **********************
 
 A special feature of myshell is the ability to run a programme in the background:
-- If you want to run a file in your shell but you want you want it to run in the background, just simpy place an ampersand '&' symbol at the end of your commannd.
-- myshell will recognise that you want to run the programme in the background and will just return the result of your programme output. 
+
+- If you want to run a file, but you want it to execute in the background, just simpy place an ampersand '&' symbol at the end of your command.
+- myshell will recognise that you want to run the programme in the background and will just return the result of your programme output.
+
+- Up until this point we where just executing commands in the foreground.
+- Usually when you launch a programme in foreground execution it takes over the terminal, stopping you from doing other work in the meantime.
+
+- Background execution can be useful for running programmes that take a long time to complete.
+- Basically the programme is pushed to the background and may continue to run as long as the terminal window is open.
+
 
 ------------------------------------------------
 10. Executing a set of commands from a batchfile
 ------------------------------------------------
-A batchfile is just a file containing a set of commands you want to execute.
-The commands you can put into the file must be some of the files in the above document.
+- A batchfile is just a file containing a set of commands you want to execute.
+- The commands you can put into the file must be some of the files in the above document.
 
 Building the batchfile:
     Each line of the batchfile must contain one and only one command.
 
-E.g.
-    echo Hello
-    dir
-    cd
+    E.g.
+        echo Hello
+        dir
+        cd
 
 You can then save the file with any desired name such as 'batch' or 'commands.txt'
 The .txt extension is not required, but can be included if you want.
@@ -303,43 +328,43 @@ When the commands have been executed, the result will be displayed on screen and
 --------------------
 I/O redirection gives the user a shortcut to storing programme execution output to files.
 
-E.g. 
-To get the contents of a direction we enter the previously seen command 
+    E.g. 
+    To get the contents of a direction we enter the previously seen command: 
 
-    ########
-      dir   
-    ########
+    ##########
+        dir   
+    ##########
 
-However, if we want to store this result to a file for later reference we extend our command to make use of I/O redirection:
+However, if we want to store this command result to a file for later reference we extend our command to make use of I/O redirection:
 
     #######################
        dir > store_file   
     #######################
-
-    If we open this file in a text editor we will see the directory contents listed one item per line 
+    - Notice here, we use the '>' symbol to indicate to the system that we want to store the output to the file 'store_file'.
+    - If we open this file in a text editor we will see the directory contents listed one item per line.
 
 *****************************************
 There are two options in I/O redirection:
 *****************************************
 
-        Overwrite
+        A. Overwrite (>)
+
         ###############################
             echo hello > outputfile   
         ###############################
-        This command will store the text hello to the outputfile
+        - This command will store the text hello to the outputfile
+        - The overwrite symbol (>) allows the user to replace the data in the output file with new data produced by the executed command.
 
-    The overwrite symbol (>) allows the user to replace the data in the output file with new data produced by the executed command.
+        B. Append (>>)
 
-
-        Append
         ########################################
             python3 echo hello >> outputfile   
         ########################################
-
-    The append symbol used (>>) allows the user to add data produced from the executed command an append it to any data already present in the outputfile and not overwriting it.
+        - The append symbol used (>>) allows the user to append data produced from the executed command to any data already present in the outputfile while not overwriting it.
     
+    **********************************
     Don't worry if you have forgotten to create the outputfile that will be written to, myshell will do this automticlly for you.
-
+    **********************************
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
