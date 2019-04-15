@@ -53,7 +53,7 @@ class myshell:
         print("\033c", end ="")
 
     # Requirement 1(iii)
-    # A function to list the contents of a specified directory
+    # A function to list the datas of a specified directory
     def dir(self, directory):
         try:
             itemCount = len([name for name in os.listdir(directory)])
@@ -107,6 +107,7 @@ class myshell:
     def quit(self):
         # print a goodbye message and exit the system
         print("Goodbye For Now")
+        # raises a system exit staus
         exit()
 
 ##########################################################################################
@@ -187,84 +188,103 @@ class myshell:
 ########################################################################################
 # IO Redirection Functions
 
-    def redirect(self, command, filename):
-    # main overwrite that will deal with dir, environ, echo & help
+    # a main redirect function that calls other smaller redirect functions (dir, environ, echo & help)
+    def redirect(self, command, file):
         try:
+            # here we first match our commands
             if command[0] == "dir":
-                # redirect(command, sign, filename)
-                self.dir_redirect("".join(command[1:-1]),command[-1],filename)
+                com = command[1:-1]
+                symbol = command[-1]
+                self.dir_redirect("".join(com), symbol, file)
+
             elif command[0] == "environ":
-                # redirect(sign, filename)
-                self.environ_redirect(command[-1], filename)
+                symbol = command[-1]
+                self.environ_redirect(symbol, file)
+
             elif command[0] == "echo":
-                # redirect(command, sign, filename)
-                self.echo_redirect(" ".join(command[1:-1]),command[-1],filename)
+                com = command[1:-1]
+                symbol = command[-1]
+                self.echo_redirect(" ".join(com), symbol, file)
+
             elif command[0] == "help":
-                # redirect(sign, filename)
-                line = self.help_redirect(command[-1], filename)
+                symbol = command[-1]
+                line = self.help_redirect(symbol, file)
+
             else:
-                print("Output redirection unavailable for '" + " ".join(command[:-1]) + "'")
+                print("Error: I/O redirection unavailable for '" + " ".join(command[:-1]) + "'")
+                # display a warning that I/O redirection is not available for the given command
         except:
-            print(colours.WARNING + "Error while trying to execute" + command + colours.END)
+            print(colours.WARNING + "Execution error for " + command + colours.END)
 
 
-    def echo_redirect(self, args, symbol, filename):
-        content = args.rstrip()
+    def echo_redirect(self, args, symbol, file):
+        data = args.rstrip()
+        # we strip of any unneccessary whitespace from the inputted arguments
 
-        # overwritten by the new contents if it does.
+        # if we use the overwrite symbol(>)
         if ">" == symbol:
-            self.overwrite(filename, content)
+            # we overwrite data in the file with new data given on the command line
+            self.overwrite(file, data)
                 
-        # If the redirection token is ">>" then outputfile is created if it does not exist and appended to if it does.
+        # else if we use the append symbol (>>)
         else:
-            self.append(filename, content)
+            # we append the new data to the data already pre-existent in the file.
+            self.append(file, data)
 
 
-    def help_redirect(self, symbol, filename):
+    def help_redirect(self, symbol, file):
+        # first open the readme file in read mode
         f = open("readme", "r")
-        if f.mode == "r":
-            content = f.read()
+        # read the contents of readme into the variable data
+        data = f.read()
 
-        # overwrite
+        # if we use the overwrite symbol(>)
         if ">" == symbol:
-            self.overwrite(filename, content)
+            # overwrite the data in the file with our new data
+            self.overwrite(file, data)
 
-        # else append
+        # else if we use the append symbol (>>)
         else:
-            self.append(filename, content)
-
+            # we append the new data to the data already pre-existent in the file.
+            self.append(file, data)
+        # finally close the readme file as we are finished with it
         f.close()
 
 
-    def environ_redirect(self, symbol, filename):
+    def environ_redirect(self, symbol, file):
+        # make referencing the environment variables easier
         environment = os.environ
+        # create a blank variables variable
         variables = ""
         for item in environment:
             variables += ((item + " = " + environment[item]) + "\n")
         
         # overwrite
         if ">" == symbol:
-            self.overwrite(filename, variables)
+            self.overwrite(file, variables)
 
         # else append
         else:
-            self.append(filename, variables)
+            # we append the new data to the data already pre-existent in the file.
+            self.append(file, variables)
 
 
-    def dir_redirect(self, args="", symbol, filename):
-        if args == "":
+    def dir_redirect(self, args, symbol, file):
+        # if no arguments have been supplied
+        if not args:
+            # take the directory as the directory where we are currently located
             args = "."
         
         for line in os.listdir(args):
-            content += line + "\n"
+            data += line + "\n"
         
         # overwrite the data
         if ">" == symbol:
-            self.overwrite(filename, content)
+            self.overwrite(file, data)
 
         # else append
         else:
-            self.append(filename, content)
+            self.append(file, data)
 
 ########################################################################################
 # Data Manipulation Functions
