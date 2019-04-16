@@ -3,7 +3,7 @@
 # Name: Gerard Slowey
 # Student Number: 17349433
 
-# importing the modules we use
+# importing the modules we use in myshell
 import os, sys, subprocess
 
 # A colours class consisting of escape sequences to make the terminal stand out more
@@ -26,25 +26,18 @@ class myshell:
 
     # Requirement 1(i)
     # A function that changes the current default director to <directory>
-    # Directory initiated to default value of empty string if no parameter supplied
-    def cd(self, directory = ""):
-        # if the <directory> argument is present
-        if directory:
-            try:
-                # change the current directory to the <directory> supplied
-                os.chdir(directory)
-                
-                # also update the PWD environment variable
-                os.environ['PWD'] = os.getcwd()
+    def cd(self, directory):
+        try:
+            # change the current directory to the <directory> supplied
+            os.chdir(directory)
+            
+            # also update the PWD environment variable
+            os.environ['PWD'] = os.getcwd()
 
-            # if the directory given does not exist an appropriate error is reported
-            except FileNotFoundError:
-                directoryWarning = colours.FAIL + "Error: cd: '" + directory + "': No such directory exists" + colours.END
-                print(directoryWarning)
-
-        else:
-            # if the <directory> argument is not present, the current directory is returned
-            return
+        # if the directory given does not exist an appropriate error is reported
+        except FileNotFoundError:
+            directoryWarning = colours.FAIL + "cd: '" + directory + "': No such directory exists" + colours.END
+            print(directoryWarning)
 
     # Requirement 1(ii)
     # A function to clear the terminal of text
@@ -53,13 +46,13 @@ class myshell:
         print("\033c", end ="")
 
     # Requirement 1(iii)
-    # A function to list the datas of a specified directory
+    # A function to list the contents of a specified directory
     def dir(self, directory):
         try:
+            # getting the number of items in a directory
             itemCount = len([name for name in os.listdir(directory)])
 
             # if the directory contains items, print them out one by one
-            
             if itemCount > 0:
                 for item in os.listdir(directory):
                     print(item)
@@ -67,7 +60,7 @@ class myshell:
                 # otherwise print a blank line to represent an empty directory
                 print("")
 
-        # else display an appropriate error message
+        # else display an appropriate error message if the directory does not exist
         except FileNotFoundError:
             accessWarning = colours.WARNING + "dir: cannot access '" + directory + "': No such file or directory"
             print(accessWarning)
@@ -76,27 +69,35 @@ class myshell:
     # A function to list all of the environment strings.
     def environ(self):
         environment = os.environ
+        # print each environmental string, one per line
         for item in environment:
+            # name = value
             print(item + " = " + environment[item])
 
     # Requirement 1(v)   
     # A function to display user input on the terminal followed by a new line
     def echo(self, input):
+        # if input is supplied to echo
         if len(input) > 0:
+            # print input out, followed by a newline
             print(input + "\n")
         else:
-            print("error: 'cd' no input provided")
+            # display an error message, indicating no input was provided
+            print(colours.FAIL + "'cd': cannot display: no input provided" + colours.END)
 
     # Requirement 1(vi)
     # A function that displays the user manual using the more command
     def help(self):
+        # use a system call to display the readme file
         os.system("more readme")
 
     # Requirement 1(vii)
     # A function that pauses the shell
     def pause(self):
+        # use the input() function to pause the shell
         try:
             waiting = input("Shell Operation Paused - Press Enter to resume")
+            # if the enter button is pressed, resume execution
             if not waiting:
                 raise ValueError("Execution Resumed")
         except ValueError as e:
@@ -105,9 +106,9 @@ class myshell:
     # Requirement 1(viii)
     # A function that exits the shell
     def quit(self):
-        # print a goodbye message and exit the system
-        print("Goodbye For Now")
-        # raises a system exit staus
+        # print a goodbye message
+        print("Goodbye For Now, Exiting")
+        # raises a system exit
         exit()
 
 ##########################################################################################
@@ -116,25 +117,34 @@ class myshell:
     # Checks user input for commands and symbols and directs what action to take next
     def run(self, command):
         try:
-            if len(command) > 2 and (">" == command[-2] or ">>" == command[-2]):
-                self.redirect(command[:-1], command[-1])
+            # check for i/o redirection commands
+            if len(command) > 2 and (command[-2] == ">" or command[-2] == ">>"):
+                instructions = command[:-1]
+                file = command[-1]
+                self.redirect(instructions, file)
             
-            elif "&" == command[-1]:
+            # check for background execution commands
+            elif command[-1] == "&":
                 try:
-                    subprocess.Popen(command[:-1])
-                    return
+                    p = subprocess.Popen(command[:-1])
+                    p.wait()
                 except:
                     print("Command Error, execution failed")
 
+        # otherwise just check for normal execution commands
             elif command[0] == "cd":
-                if len(command) > 2:
-                    print("error: 'cd' only accepts one directory parameter")
-                elif len(command) > 1:
+                if len(command) == 2:
                     self.cd(command[1])
-            
+                elif len(command) > 2:
+                    # inform the user they have used the cd command wrong
+                    print("error: 'cd' only accepts one directory parameter")
+                else:
+                    # if the <directory> argument is not present, the current directory is returned
+                    self.cd(".")
+
             elif command[0] == "clr":
                 if len(command) > 1:
-                    # appropriate error handling if a paramter is supplied with the clr command
+                    # appropriate error handling if a parameter is supplied with the clr command
                     print("error: 'clr' does not take a parameter")
                 else:
                     self.clr()
@@ -149,7 +159,7 @@ class myshell:
                 self.environ()
             
             elif command[0] == "echo":
-                # multiple spaces/tabs are reduced to a `ngle space.
+                # multiple spaces/tabs are reduced to a single space.
                 self.echo(" ".join(command[1:]))
             
             elif command[0] == "help":
@@ -167,23 +177,18 @@ class myshell:
                 self.childProcess(command[:])
         
         except EOFError as e:
-            print("Error while trying to execute" + command)
+            print(colours.WARNING + "Error while trying to execute" + command + colours.END)
         
-
 ########################################################################################
 # Multiprocessing Functions
 
-    # Creates a new subprocess with specified environment variables
+    # Creates a subprocess to execute the given programme
     def childProcess(self, args):
         try:
-            pid = os.fork()
-            if pid > 0:
-                wpid = os.waitpid(pid, 0)
-            else:
-                subprocess.call([args[0], args[1]]) 
+            # e.g. python3 test.py
+            subprocess.run([args[0], args[1]]) 
         except:
             print(colours.WARNING + "Process Creation Error" + colours.END)
-
 
 ########################################################################################
 # IO Redirection Functions
@@ -211,7 +216,7 @@ class myshell:
                 line = self.help_redirect(symbol, file)
 
             else:
-                print("Error: I/O redirection unavailable for '" + " ".join(command[:-1]) + "'")
+                print(colours.WARNING + "Error: I/O redirection unavailable for '" + " ".join(command[:-1]) + "'" + colours.END)
                 # display a warning that I/O redirection is not available for the given command
         except:
             print(colours.WARNING + "Execution error for " + command + colours.END)
@@ -257,10 +262,12 @@ class myshell:
         # create a blank variables variable
         variables = ""
         for item in environment:
+            # add each item to the variables variable
             variables += ((item + " = " + environment[item]) + "\n")
         
         # overwrite
         if ">" == symbol:
+            # overwrite the file contents
             self.overwrite(file, variables)
 
         # else append
@@ -275,6 +282,7 @@ class myshell:
             # take the directory as the directory where we are currently located
             args = "."
         
+        data = ""
         for line in os.listdir(args):
             data += line + "\n"
         
@@ -292,14 +300,12 @@ class myshell:
     # An overwriting command
     def overwrite(self, file, data):
         with open(file, 'w+') as f:
-            f.write("---------------------------------\n")
             f.write(data)
             f.write("---------------------------------\n")
 
     # An append command
     def append(self, file, data):
         with open(file, 'a+') as f:
-            f.write("---------------------------------\n")
             f.write("\n" + data)
             f.write("---------------------------------\n")
 
@@ -319,16 +325,15 @@ class myshell:
             accessWarning = colours.WARNING + "Cannot access '" + file + "': No such file exists" + colours.END
             print(accessWarning)
 
-        
 
-
+########################################################################################
 # Main function
 def main(argv):
     
     # get the user name
     user = str(os.environ['USER'])
 
-    # if the shell is invoked with a command line argument e.g. a batchfile
+    # if the shell is invoked with a batchfile
     if len(argv) == 2:
         # the file name is the arg at position 1
         file = argv[1]
@@ -341,15 +346,15 @@ def main(argv):
     
     else:
         # display a welcome message the user when they open the shell first
-        print("Hello " + user + ", type 'help' to display a list of commands.")
+        print("Hello " + user + ", type 'help' to display the manual.")
         
-        # an infinite loop to allow the user to enter commands until the call quit()
+        # an infinite loop to allow the user to enter commands until they call quit()
         while True:
             
             # a command to display the current working directory to the user
             entry = input(colours.GREEN + colours.BOLD + os.environ['PWD'] + colours.END + "$ ")
             
-            # if there is a command avaiable
+            # if there is a command is entered
             if len(entry) != 0:
                 # invoke the run method
                 myshell().run(entry.split())
