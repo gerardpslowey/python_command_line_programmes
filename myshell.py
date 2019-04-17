@@ -25,7 +25,7 @@ class myshell:
         os.environ['SHELL'] = str(os.getcwd()) + "/myshell"
 
     # Requirement 1(i)
-    # A function that changes the current default director to <directory>
+    # A function that changes the current default directory to <directory>
     def cd(self, directory):
         try:
             # change the current directory to the <directory> supplied
@@ -49,7 +49,7 @@ class myshell:
     # A function to list the contents of a specified directory
     def dir(self, directory):
         try:
-            # getting the number of items in a directory
+        # try getting the number of items in a directory
             itemCount = len([name for name in os.listdir(directory)])
 
             # if the directory contains items, print them out one by one
@@ -71,7 +71,7 @@ class myshell:
         environment = os.environ
         # print each environmental string, one per line
         for item in environment:
-            # name = value
+            # print format is name = value
             print(item + " = " + environment[item])
 
     # Requirement 1(v)   
@@ -79,7 +79,7 @@ class myshell:
     def echo(self, input):
         # if input is supplied to echo
         if len(input) > 0:
-            # print input out, followed by a newline
+            # print the input out, followed by a newline
             print(input + "\n")
         else:
             # display an error message, indicating no input was provided
@@ -131,13 +131,13 @@ class myshell:
                 except:
                     print("Command Error, execution failed")
 
-        # otherwise just check for normal execution commands
+        # otherwise just check for normal execution commands with error handling 
             elif command[0] == "cd":
                 if len(command) == 2:
                     self.cd(command[1])
                 elif len(command) > 2:
                     # inform the user they have used the cd command wrong
-                    print("error: 'cd' only accepts one directory parameter")
+                    print(colours.WARNING + "error: 'cd' only accepts one directory parameter" + colours.END)
                 else:
                     # if the <directory> argument is not present, the current directory is returned
                     self.cd(".")
@@ -145,28 +145,39 @@ class myshell:
             elif command[0] == "clr":
                 if len(command) > 1:
                     # appropriate error handling if a parameter is supplied with the clr command
-                    print("error: 'clr' does not take a parameter")
+                    print(colours.WARNING + "error: 'clr' does not take a parameter" + colours.END)
                 else:
                     self.clr()
             
             elif command[0] == "dir":
-                if len(command) > 1:
+                if len(command) == 2:
                     self.dir(command[1])
-                else:
+                elif len(command) == 1:
                     self.dir(".")
+                else:
+                    print(colours.WARNING + "error: 'dir': only accepts one directory parameter" + colours.END)
             
             elif command[0] == "environ":
-                self.environ()
+                if len(command) > 1:
+                    print(colours.WARNING + "error: 'environ' does not take a parameter" + colours.END)
+                else:
+                    self.environ()
             
             elif command[0] == "echo":
                 # multiple spaces/tabs are reduced to a single space.
                 self.echo(" ".join(command[1:]))
             
             elif command[0] == "help":
-                self.help()
+                if len(command) > 1:
+                    print(colours.WARNING + "error: 'help' does not take a parameter" + colours.END)
+                else:
+                    self.help()
             
             elif command[0] == "pause":
-                self.pause()
+                if len(command) > 1:
+                    print(colours.WARNING + "error: 'pause' does not take a parameter" + colours.END)
+                else:
+                    self.pause()
             
             elif command[0] == "quit" or command[0] == "q":
                 self.quit()
@@ -198,29 +209,46 @@ class myshell:
         try:
             # here we first match our commands
             if command[0] == "dir":
-                com = command[1:-1]
-                symbol = command[-1]
-                self.dir_redirect("".join(com), symbol, file)
+                if len(command) > 2:
+                    directory = command[1]
+                    symbol = command[-1]
+                    self.dir_redirect(directory, symbol, file)
+                else:
+                    directory = "."
+                    symbol = command[-1]
+                    self.dir_redirect(directory, symbol, file)
 
             elif command[0] == "environ":
-                symbol = command[-1]
-                self.environ_redirect(symbol, file)
+                if len(command) > 2:
+                    print(colours.WARNING + "error: 'environ' command does not take parameters" + colours.END)
+                else:
+                    symbol = command[-1]
+                    self.environ_redirect(symbol, file)
 
             elif command[0] == "echo":
-                com = command[1:-1]
-                symbol = command[-1]
-                self.echo_redirect(" ".join(com), symbol, file)
+                if len(command) == 2:
+                    print(colours.WARNING + "error: 'echo' no text entered to redirect" + colours.END)
+                else:
+                    text = command[1:-1]
+                    symbol = command[-1]
+                    self.echo_redirect(" ".join(text), symbol, file)
 
             elif command[0] == "help":
-                symbol = command[-1]
-                line = self.help_redirect(symbol, file)
+                if len(command) > 2:
+                    print(colours.WARNING + "error: 'help' command does not take parameters" + colours.END)
+                else:
+                    symbol = command[-1]
+                    line = self.help_redirect(symbol, file)
 
             else:
                 print(colours.WARNING + "Error: I/O redirection unavailable for '" + " ".join(command[:-1]) + "'" + colours.END)
                 # display a warning that I/O redirection is not available for the given command
-        except:
+        
+        except FileNotFoundError:
             print(colours.WARNING + "Execution error for " + command + colours.END)
-
+        except IndexError:
+            indexWarning = colours.WARNING + "Access Error"
+            print(indexWarning)
 
     def echo_redirect(self, args, symbol, file):
         data = args.rstrip()
@@ -236,25 +264,27 @@ class myshell:
             # we append the new data to the data already pre-existent in the file.
             self.append(file, data)
 
-
     def help_redirect(self, symbol, file):
-        # first open the readme file in read mode
-        f = open("readme", "r")
-        # read the contents of readme into the variable data
-        data = f.read()
+        try:
+            # first open the readme file in read mode
+            f = open("readme", "r")
+            # read the contents of readme into the variable data
+            data = f.read()
 
-        # if we use the overwrite symbol(>)
-        if ">" == symbol:
-            # overwrite the data in the file with our new data
-            self.overwrite(file, data)
+            # if we use the overwrite symbol(>)
+            if ">" == symbol:
+                # overwrite the data in the file with our new data
+                self.overwrite(file, data)
 
-        # else if we use the append symbol (>>)
-        else:
-            # we append the new data to the data already pre-existent in the file.
-            self.append(file, data)
-        # finally close the readme file as we are finished with it
-        f.close()
-
+            # else if we use the append symbol (>>)
+            else:
+                # we append the new data to the data already pre-existent in the file.
+                self.append(file, data)
+            # finally close the readme file as we are finished with it
+            f.close()
+        except FileNotFoundError:
+            accessWarning = colours.WARNING + "readme cannot be accessed: file missing"
+            print(accessWarning)
 
     def environ_redirect(self, symbol, file):
         # make referencing the environment variables easier
@@ -275,24 +305,27 @@ class myshell:
             # we append the new data to the data already pre-existent in the file.
             self.append(file, variables)
 
-
-    def dir_redirect(self, args, symbol, file):
+    def dir_redirect(self, directory, symbol, file):
         # if no arguments have been supplied
-        if not args:
+        if not directory:
             # take the directory as the directory where we are currently located
-            args = "."
-        
-        data = ""
-        for line in os.listdir(args):
-            data += line + "\n"
-        
-        # overwrite the data
-        if ">" == symbol:
-            self.overwrite(file, data)
+            directory = "."
 
-        # else append
-        else:
-            self.append(file, data)
+        try:
+            data = ""
+            for line in os.listdir(directory):
+                data += line + "\n"
+            
+            # overwrite the data
+            if ">" == symbol:
+                self.overwrite(file, data)
+
+            # else append
+            else:
+                self.append(file, data)
+        except FileNotFoundError:
+            accessWarning = colours.WARNING + "dir: cannot access '" + directory + "': No such file or directory"
+            print(accessWarning)
 
 ########################################################################################
 # Data Manipulation Functions
@@ -300,15 +333,14 @@ class myshell:
     # An overwriting command
     def overwrite(self, file, data):
         with open(file, 'w+') as f:
-            f.write(data)
+            f.write(data + "\n")
             f.write("---------------------------------\n")
 
     # An append command
     def append(self, file, data):
         with open(file, 'a+') as f:
-            f.write("\n" + data)
+            f.write(data + "\n")
             f.write("---------------------------------\n")
-
 
     # Enables the shell to take its command line input from a file.
     # e.g myshell batchfile
@@ -324,7 +356,6 @@ class myshell:
             # if the file supplied cannot be accessed display a failure message to the user
             accessWarning = colours.WARNING + "Cannot access '" + file + "': No such file exists" + colours.END
             print(accessWarning)
-
 
 ########################################################################################
 # Main function
@@ -358,7 +389,6 @@ def main(argv):
             if len(entry) != 0:
                 # invoke the run method
                 myshell().run(entry.split())
-
 
 if __name__ == '__main__':
     main(sys.argv)
