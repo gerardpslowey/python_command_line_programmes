@@ -83,7 +83,7 @@ class myshell:
             print(input + "\n")
         else:
             # display an error message, indicating no input was provided
-            print(colours.FAIL + "'cd': cannot display: no input provided" + colours.END)
+            print(colours.FAIL + "'echo': cannot display message: no input provided" + colours.END)
 
     # Requirement 1(vi)
     # A function that displays the user manual using the more command
@@ -117,13 +117,13 @@ class myshell:
     # Checks user input for commands and symbols and directs what action to take next
     def run(self, command):
         try:
-            # check for i/o redirection commands
+        # check for i/o redirection commands
             if len(command) > 2 and (command[-2] == ">" or command[-2] == ">>"):
                 instructions = command[:-1]
                 file = command[-1]
                 self.redirect(instructions, file)
             
-            # check for background execution commands
+        # check for background execution commands
             elif command[-1] == "&":
                 try:
                     p = subprocess.Popen(command[:-1])
@@ -209,46 +209,52 @@ class myshell:
         try:
             # here we first match our commands
             if command[0] == "dir":
+                # if a directory is supplied
                 if len(command) > 2:
                     directory = command[1]
                     symbol = command[-1]
                     self.dir_redirect(directory, symbol, file)
                 else:
+                    # otherwise just use the current directory
                     directory = "."
                     symbol = command[-1]
                     self.dir_redirect(directory, symbol, file)
 
             elif command[0] == "environ":
+                # if a parameter is supplied in error, display a message
                 if len(command) > 2:
                     print(colours.WARNING + "error: 'environ' command does not take parameters" + colours.END)
                 else:
+                    # execute as normal
                     symbol = command[-1]
                     self.environ_redirect(symbol, file)
 
             elif command[0] == "echo":
+                # if no echo message is supplied
                 if len(command) == 2:
                     print(colours.WARNING + "error: 'echo' no text entered to redirect" + colours.END)
                 else:
+                    # continue as normal
                     text = command[1:-1]
                     symbol = command[-1]
                     self.echo_redirect(" ".join(text), symbol, file)
 
             elif command[0] == "help":
+                # if a parameter is supplied with the help command
                 if len(command) > 2:
                     print(colours.WARNING + "error: 'help' command does not take parameters" + colours.END)
                 else:
+                    # otherwise continue as normal
                     symbol = command[-1]
                     line = self.help_redirect(symbol, file)
 
             else:
+                # inform the user the command they want to use is not applicable to i/o redirection
                 print(colours.WARNING + "Error: I/O redirection unavailable for '" + " ".join(command[:-1]) + "'" + colours.END)
-                # display a warning that I/O redirection is not available for the given command
         
-        except FileNotFoundError:
+        except:
+            # handle exceptions by displaying an execution error
             print(colours.WARNING + "Execution error for " + command + colours.END)
-        except IndexError:
-            indexWarning = colours.WARNING + "Access Error"
-            print(indexWarning)
 
     def echo_redirect(self, args, symbol, file):
         data = args.rstrip()
@@ -280,8 +286,10 @@ class myshell:
             else:
                 # we append the new data to the data already pre-existent in the file.
                 self.append(file, data)
+            
             # finally close the readme file as we are finished with it
             f.close()
+
         except FileNotFoundError:
             accessWarning = colours.WARNING + "readme cannot be accessed: file missing"
             print(accessWarning)
@@ -289,7 +297,6 @@ class myshell:
     def environ_redirect(self, symbol, file):
         # make referencing the environment variables easier
         environment = os.environ
-        # create a blank variables variable
         variables = ""
         for item in environment:
             # add each item to the variables variable
@@ -323,6 +330,7 @@ class myshell:
             # else append
             else:
                 self.append(file, data)
+
         except FileNotFoundError:
             accessWarning = colours.WARNING + "dir: cannot access '" + directory + "': No such file or directory"
             print(accessWarning)
