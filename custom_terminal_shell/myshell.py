@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-# Name: Gerard Slowey
-# Student Number: 17349433
-
 # importing the modules we use in myshell
 import os, sys, subprocess
 
