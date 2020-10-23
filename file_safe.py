@@ -58,7 +58,6 @@ if connect == PASSWORD:
             FILE_TYPES = {
                 "txt": "TEXT",
                 "java": "TEXT",
-                "dart": "TEXT",
                 "py": "TEXT",
                 "jpg": "IMAGE",
                 "png": "IMAGE",
@@ -77,7 +76,7 @@ if connect == PASSWORD:
             except:
                 Exception()
 
-            if EX12TENSION == "IMAGE":
+            if EXTENSION == "IMAGE":
                 IMAGE = cv2.imread(PATH)
                 file_string = base64.b64encode(cv2.imencode('.jpg', IMAGE)[1]).decode()
 
