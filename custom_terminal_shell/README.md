@@ -1,6 +1,3 @@
-# Name: Gerard Slowey
-# Student Number: 17349433
-
 ======================
 myshell - User Manual 
 ======================
